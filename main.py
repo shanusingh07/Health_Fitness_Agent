@@ -38,6 +38,35 @@ class IntentDetector:
             return "unknown"
 
 
+
+
+
+class AgentController:
+
+    def __init__(self):
+        self.detector = IntentDetector()
+
+    def process(self, query, user_data):
+        intent = self.detector.detect(query)
+
+        # Convert dict to User object (functions expect User, not dict)
+        user = User(**user_data)
+
+        if intent == "bmi":
+            bmi = calculate_bmi(user.weight, user.height)
+            category = bmi_category(bmi)
+            return f"BMI: {bmi:.2f}, Category: {category}"
+
+        elif intent == "diet":
+            return generate_meal_plan(user)
+
+        elif intent == "workout":
+            return generate_workout_plan(user)
+
+        else:
+            return "Sorry, I didn't understand that 😅"
+
+
 # 🔥 Helper functions for safe input
 def get_int_input(prompt):
     while True:
@@ -150,4 +179,36 @@ def main():
 
 # Run app
 if __name__ == "__main__":
-    main()
+
+    # Step 1: Get user details (only once)
+    data = get_user_input()
+
+    # Step 2: Validate the data
+    is_valid, message = validate_user_data(data)
+    if not is_valid:
+        print("❌ Error:", message)
+    else:
+        # Step 3: Display Health Report
+        user = User(**data)
+        bmi = calculate_bmi(user.weight, user.height)
+        category = bmi_category(bmi)
+        calories = calculate_calories(user)
+
+        print("\n===== 🏥 HEALTH REPORT =====")
+        print(f"BMI: {bmi:.2f} | Category: {category}")
+        print(f"Daily Calories: {calories}")
+
+        # Step 4: Start the Agent chatbot
+        controller = AgentController()
+        print("\n🤖 Agent Ready! (type 'exit' to quit)")
+        print("Try: 'show my bmi', 'give me a diet plan', 'suggest a workout'\n")
+
+        while True:
+            query = input("👤 You: ")
+
+            if query.lower() == "exit":
+                print("🤖 Goodbye! Stay healthy! 💪")
+                break
+
+            response = controller.process(query, data)
+            print("🤖 Agent:", response, "\n")
