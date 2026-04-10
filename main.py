@@ -19,6 +19,25 @@ from tracking_service.progress import track_progress
 from tracking_service.history import History
 
 
+
+
+class IntentDetector:
+    def detect(self, query):
+        query = query.lower()
+
+        if "bmi" in query:
+            return "bmi"
+
+        elif "diet" in query:
+            return "diet"
+
+        elif "workout" in query:
+            return "workout"
+
+        else:
+            return "unknown"
+
+
 # 🔥 Helper functions for safe input
 def get_int_input(prompt):
     while True:
