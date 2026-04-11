@@ -1,3 +1,7 @@
+import sys
+if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 # User Service
 from user_services.user import User
 from user_services.validation import validate_user_data
@@ -18,29 +22,48 @@ from health_service.calorie import calculate_calories
 from tracking_service.progress import track_progress
 from tracking_service.history import History
 
+# 🔥 Gemini AI Setup
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+# 🔑 Load API key from .env file
+load_dotenv()
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
+# 🔥 AI function
+def ask_ai(query, user_data):
+    prompt = f"""
+    User details: {user_data}
+    User query: {query}
 
+    You are a fitness and health AI assistant.
+    Give safe, practical and short advice.
+    """
+
+    response = model.generate_content(prompt)
+    return response.text
+
+
+# 🔥 Intent Detector
 class IntentDetector:
     def detect(self, query):
         query = query.lower()
 
         if "bmi" in query:
             return "bmi"
-
         elif "diet" in query:
             return "diet"
-
         elif "workout" in query:
             return "workout"
-
         else:
             return "unknown"
 
 
-
-
-
+# 🔥 Agent Controller (AI Integrated)
 class AgentController:
 
     def __init__(self):
@@ -48,9 +71,12 @@ class AgentController:
 
     def process(self, query, user_data):
         intent = self.detector.detect(query)
-
-        # Convert dict to User object (functions expect User, not dict)
         user = User(**user_data)
+
+        # 🔥 AI fallback
+        if intent == "unknown":
+            print("🤖 Using AI to answer your question...")
+            return ask_ai(query, user_data)
 
         if intent == "bmi":
             bmi = calculate_bmi(user.weight, user.height)
@@ -63,21 +89,18 @@ class AgentController:
         elif intent == "workout":
             return generate_workout_plan(user)
 
-        else:
-            return "Sorry, I didn't understand that 😅"
 
-
-# 🔥 Helper functions for safe input
+# 🔥 Input helpers
 def get_int_input(prompt):
     while True:
         try:
             value = input(prompt).strip()
             if not value:
-                print("⚠️  This field is required. Please enter a value.")
+                print("⚠️ Required field")
                 continue
             return int(value)
-        except ValueError:
-            print("⚠️  Please enter a valid whole number.")
+        except:
+            print("⚠️ Enter valid number")
 
 
 def get_float_input(prompt):
@@ -85,26 +108,26 @@ def get_float_input(prompt):
         try:
             value = input(prompt).strip()
             if not value:
-                print("⚠️  This field is required. Please enter a value.")
+                print("⚠️ Required field")
                 continue
             return float(value)
-        except ValueError:
-            print("⚠️  Please enter a valid number.")
+        except:
+            print("⚠️ Enter valid number")
 
 
 def get_choice_input(prompt, valid_options):
     while True:
         value = input(prompt).strip().lower()
         if not value:
-            print("⚠️  This field is required. Please enter a value.")
+            print("⚠️ Required field")
             continue
         if value not in valid_options:
-            print(f"⚠️  Please choose from: {' / '.join(valid_options)}")
+            print(f"⚠️ Choose from {valid_options}")
             continue
         return value
 
 
-# 🔥 User input function
+# 🔥 User input
 def get_user_input():
     print("\nEnter your details 👇\n")
 
@@ -112,9 +135,9 @@ def get_user_input():
     weight = get_float_input("Weight (kg): ")
     height = get_float_input("Height (cm): ")
     goal = get_choice_input("Goal (fat loss / muscle gain / maintenance): ",
-                            ["fat loss", "muscle gain", "maintenance"])
+                           ["fat loss", "muscle gain", "maintenance"])
     diet = get_choice_input("Diet (vegetarian / keto / low carb / normal): ",
-                            ["vegetarian", "keto", "low carb", "normal"])
+                           ["vegetarian", "keto", "low carb", "normal"])
 
     return {
         "age": age,
@@ -125,90 +148,50 @@ def get_user_input():
     }
 
 
-def main():
-    # 🔹 Step 1: Take user input (UPDATED)
+# 🔥 MAIN FLOW
+if __name__ == "__main__":
+
+    # Step 1: Input
     data = get_user_input()
 
-    # 🔹 Step 2: Validate Data
+    # Step 2: Validate
     is_valid, message = validate_user_data(data)
-
     if not is_valid:
-        print("Error:", message)
-        return
+        print("❌ Error:", message)
+        exit()
 
-    # 🔹 Step 3: Create User Object
     user = User(**data)
 
-    # 🔹 Step 4: Health Calculations
+    # Step 3: Health Report
     bmi = calculate_bmi(user.weight, user.height)
     category = bmi_category(bmi)
     calories = calculate_calories(user)
 
-    # 🔹 Step 5: Diet Plan
-    diet_plan = generate_meal_plan(user)
-    nutrition = get_nutrition_tips(user)
+    print("\n===== 🏥 HEALTH REPORT =====")
+    print(f"BMI: {bmi:.2f} | Category: {category}")
+    print(f"Calories: {calories}")
 
-    # 🔹 Step 6: Fitness Plan
-    workout = generate_workout_plan(user)
-    routine = weekly_routine(user.goal)
-
-    # 🔹 Step 7: Tracking
-    history = History()
-    history.add_record({"weight": user.weight})
-    history.add_record({"weight": user.weight - 2})
-
-    progress = track_progress(user, user.weight - 2, user.weight)
-
-    # 🔥 Final Output
-    print("\n===== HEALTH REPORT =====")
-    print("BMI:", bmi, "| Category:", category)
-    print("Daily Calories:", calories)
-
-    print("\n===== DIET PLAN =====")
-    print(diet_plan)
-    print("Nutrition Tips:", nutrition)
-
-    print("\n===== FITNESS PLAN =====")
-    print(workout)
-    print("Weekly Routine:", routine)
-
-    print("\n===== PROGRESS =====")
-    print(progress)
-    print("History:", history.get_history())
-
-
-# Run app
-if __name__ == "__main__":
-
-    # Step 1: Get user details (only once)
-    data = get_user_input()
-
-    # Step 2: Validate the data
-    is_valid, message = validate_user_data(data)
-    if not is_valid:
-        print("❌ Error:", message)
+    # 🔥 AI Suggestion
+    print("\n🤖 AI SUGGESTION:")
+    if bmi < 18.5:
+        print("You are underweight → Focus on muscle gain")
+    elif bmi <= 24.9:
+        print("You are fit → Maintain balance")
     else:
-        # Step 3: Display Health Report
-        user = User(**data)
-        bmi = calculate_bmi(user.weight, user.height)
-        category = bmi_category(bmi)
-        calories = calculate_calories(user)
+        print("You are overweight → Focus on fat loss")
 
-        print("\n===== 🏥 HEALTH REPORT =====")
-        print(f"BMI: {bmi:.2f} | Category: {category}")
-        print(f"Daily Calories: {calories}")
+    # Step 4: Agent Start
+    controller = AgentController()
 
-        # Step 4: Start the Agent chatbot
-        controller = AgentController()
-        print("\n🤖 Agent Ready! (type 'exit' to quit)")
-        print("Try: 'show my bmi', 'give me a diet plan', 'suggest a workout'\n")
+    print("\n🤖 Agent Ready! (type 'exit' to quit)")
+    print("Try: bmi / diet / workout / any health question\n")
 
-        while True:
-            query = input("👤 You: ")
+    while True:
+        query = input("👤 You: ")
 
-            if query.lower() == "exit":
-                print("🤖 Goodbye! Stay healthy! 💪")
-                break
+        if query.lower() == "exit":
+            print("👋 Goodbye!")
+            break
 
-            response = controller.process(query, data)
-            print("🤖 Agent:", response, "\n")
+        response = controller.process(query, data)
+        print("🤖 Agent:", response, "\n")
