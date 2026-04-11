@@ -52,3 +52,64 @@ Built the foundation of a **Health Fitness Agent** using a modular approach and 
 * Build UI / API
 
 ---
+# 📅 Day 2 Progress – AI Integration & Debugging
+
+## ✅ Work Completed
+
+* Integrated **Gemini AI (LLM)** into existing Health & Fitness Agent
+* Converted project from rule-based → **Hybrid AI Agent**
+
+  * Known queries (BMI, Diet, Workout) → handled by services
+  * Unknown queries → handled by AI
+* Created `ask_ai()` function for dynamic responses
+* Connected `.env` file for secure API key management
+* Installed and configured:
+
+  * `google-generativeai`
+  * `python-dotenv`
+* Improved AgentController with AI fallback logic
+
+---
+
+## ⚠️ Issues Faced (Gemini API)
+
+* ❌ `gemini-pro` model not found (deprecated model)
+* ❌ `gemini-1.5-flash` also not working due to API version mismatch
+* ❌ 404 error: *model not supported for generateContent*
+* ❌ Possible causes identified:
+
+  * Outdated library version
+  * Incorrect model name
+  * API not properly configured / loaded
+
+---
+
+## 🔧 Fix Attempts
+
+* Updated model name to latest versions
+* Tried alternative model formats (`models/...`)
+* Attempted library upgrade using pip
+* Verified `.env` API key loading
+
+---
+
+## 📊 Current Status
+
+* 🟡 AI integration: **80% complete**
+* 🔴 Gemini API: **not fully working (debugging in progress)**
+* 🟢 Core project (services + agent): **fully functional**
+
+---
+
+## 🎯 Next Plan (Day 3)
+
+* Fix Gemini API issue (model compatibility / SDK update)
+* Test AI responses for real-world queries (injury, diet advice)
+* Add **chat history / memory system**
+* Improve response quality (prompt engineering)
+
+---
+
+## 🚀 Summary
+
+Today the project moved from a basic service-based system to an **AI-powered intelligent agent**, but API-related issues are still being resolved.
