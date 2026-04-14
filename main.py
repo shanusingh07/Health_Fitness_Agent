@@ -22,17 +22,13 @@ from health_service.calorie import calculate_calories
 from tracking_service.progress import track_progress
 from tracking_service.history import History
 
-# 🔥 Gemini AI Setup
-import google.generativeai as genai
+# 🔥 ChatGPT Setup
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
-# 🔑 Load API key from .env file
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-model = genai.GenerativeModel("gemini-1.5-flash")
-
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 🔥 AI function
 def ask_ai(query, user_data):
@@ -44,8 +40,16 @@ def ask_ai(query, user_data):
     Give safe, practical and short advice.
     """
 
-    response = model.generate_content(prompt)
-    return response.text
+    response = client.chat.completions.create(
+        model="gpt-5-mini",
+        messages=[
+            {"role": "system", "content": "You are a helpful fitness and health assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7
+    )
+
+    return response.choices[0].message.content
 
 
 # 🔥 Intent Detector
@@ -63,7 +67,7 @@ class IntentDetector:
             return "unknown"
 
 
-# 🔥 Agent Controller (AI Integrated)
+# 🔥 Agent Controller
 class AgentController:
 
     def __init__(self):
@@ -75,7 +79,7 @@ class AgentController:
 
         # 🔥 AI fallback
         if intent == "unknown":
-            print("🤖 Using AI to answer your question...")
+            print("🤖 Using ChatGPT to answer your question...")
             return ask_ai(query, user_data)
 
         if intent == "bmi":
