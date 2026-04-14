@@ -113,3 +113,28 @@ Built the foundation of a **Health Fitness Agent** using a modular approach and 
 ## 🚀 Summary
 
 Today the project moved from a basic service-based system to an **AI-powered intelligent agent**, but API-related issues are still being resolved.
+
+
+# Day 3 Progress
+
+## Work Done
+- Replaced Gemini API with OpenAI (ChatGPT API)
+- Integrated AI fallback using GPT model
+- Updated ask_ai function for better responses
+- Tested API response and fixed errors
+- Worked on agent controller flow
+
+## Improvements
+- Improved response quality using ChatGPT
+- Better handling of unknown queries
+- Cleaned and structured main.py
+
+## Issues Faced
+- API key loading issue from .env
+- Initial errors while switching from Gemini to OpenAI
+- Minor debugging in response handling
+
+## Next Plan
+- Add chat history (memory)
+- Improve intent detection
+- Start UI integration (Streamlit)
