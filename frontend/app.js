@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Transition to Chat Section
         setupSection.classList.add('hidden');
         setupSection.classList.remove('active-section');
-        
+
         chatSection.classList.remove('hidden');
         chatSection.classList.add('active-section');
 
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Calculate BMI
         const heightMeters = data.height / 100;
         const bmi = data.weight / (heightMeters * heightMeters);
-        
+
         let category = "";
         let insight = "";
         if (bmi < 18.5) {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let calories = 2000;
         if (data.goal === 'fat loss') calories -= 300;
         else if (data.goal === 'muscle gain') calories += 300;
-        
+
         // Update DOM
         summaryBmi.textContent = bmi.toFixed(2);
         summaryCategory.textContent = category;
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Handle Chat Submission
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const message = chatInput.value.trim();
         if (!message) return;
 
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mock agent response based on intent
         const lowerMsg = message.toLowerCase();
         let reply = "I'm still just a beautiful frontend! Connect me to your Python backend to unleash my full potential. 🚀";
-        
+
         if (lowerMsg.includes('diet') || lowerMsg.includes('meal')) {
             reply = `Based on your **${userData.diet}** preference and goal of **${userData.goal}**, I'd recommend a high protein breakfast, followed by balanced meals focusing on complex carbs and healthy fats.`;
         } else if (lowerMsg.includes('workout') || lowerMsg.includes('exercise')) {
@@ -118,14 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function appendMessage(text, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', `${sender}-message`);
-        
+
         const contentDiv = document.createElement('div');
         contentDiv.classList.add('message-content');
         contentDiv.innerHTML = formatText(text); // Basic formatting
 
         messageDiv.appendChild(contentDiv);
         chatBox.appendChild(messageDiv);
-        
+
         // Scroll to bottom
         chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -140,20 +140,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageDiv = document.createElement('div');
         messageDiv.id = id;
         messageDiv.classList.add('message', 'agent-message');
-        
+
         const contentDiv = document.createElement('div');
         contentDiv.classList.add('message-content', 'typing-indicator');
-        
+
         contentDiv.innerHTML = `
             <div class="typing-dot"></div>
             <div class="typing-dot"></div>
             <div class="typing-dot"></div>
         `;
-        
+
         messageDiv.appendChild(contentDiv);
         chatBox.appendChild(messageDiv);
         chatBox.scrollTop = chatBox.scrollHeight;
-        
+
         return id;
     }
 

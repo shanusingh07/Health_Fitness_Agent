@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Background Elements for Aesthetics -->
     <div class="bg-orb orb-1"></div>
@@ -16,16 +18,16 @@
         <!-- Onboarding / Profile Setup Section (Initially Visible) -->
         <section id="setup-section" class="glass-panel active-section fade-in">
             <div class="header-text">
-                <h1>Welcome to <span class="text-gradient">Vitality AI</span></h1>
+                <h1>Welcome to <span class="text-gradient">Health and Fitness Agent</span></h1>
                 <p>Let's personalize your fitness journey.</p>
             </div>
-            
+
             <form id="profile-form">
                 <div class="input-group">
                     <label for="age">Age</label>
                     <input type="number" id="age" name="age" required placeholder="e.g. 25">
                 </div>
-                
+
                 <div class="input-row">
                     <div class="input-group">
                         <label for="weight">Weight (kg)</label>
@@ -63,7 +65,11 @@
                 </div>
 
                 <button type="submit" class="btn-primary mt-4">
-                    Initialize Agent <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    Initialize Agent <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
                 </button>
             </form>
         </section>
@@ -88,7 +94,12 @@
                     </div>
                     <div class="ai-suggestion">
                         <div class="suggestion-header">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="icon-sparkle" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="icon-sparkle"
+                                stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z">
+                                </path>
+                            </svg>
                             AI Insight
                         </div>
                         <p id="summary-insight">Initializing...</p>
@@ -108,20 +119,26 @@
                         <span class="status"><span class="status-dot"></span> Online</span>
                     </div>
                 </div>
-                
+
                 <div class="chat-box" id="chat-box">
                     <div class="message agent-message">
                         <div class="message-content">
-                            Hello! I'm your personal health & fitness agent. You can ask me for a workout routine, diet plan, or any general health question!
+                            Hello! I'm your personal health & fitness agent. You can ask me for a workout routine, diet
+                            plan, or any general health question!
                         </div>
                     </div>
                 </div>
 
                 <div class="chat-input-area">
                     <form id="chat-form">
-                        <input type="text" id="chat-input" placeholder="Type 'workout', 'diet', or ask a question..." autocomplete="off">
+                        <input type="text" id="chat-input" placeholder="Type 'workout', 'diet', or ask a question..."
+                            autocomplete="off">
                         <button type="submit" class="btn-send">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="m22 2-7 20-4-9-9-4Z"></path>
+                                <path d="M22 2 11 13"></path>
+                            </svg>
                         </button>
                     </form>
                 </div>
@@ -131,4 +148,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
