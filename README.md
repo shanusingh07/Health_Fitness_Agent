@@ -53,25 +53,25 @@ Health_Fitness_agent/
 │
 ├── main.py                  # Entry point (chat interface)
 │
-├── diet_service/
-│   ├── meal_generator.py   # Generates diet plans
-│   └── nutrition.py        # Provides health tips
+├── services/                # All microservices in one folder
+│   ├── __init__.py          # Package exports
+│   ├── diet_service.py      # Meal plans + nutrition tips
+│   ├── fitness_service.py   # Workout plans + weekly routine
+│   ├── health_service.py    # BMI + calorie calculation
+│   ├── tracking_service.py  # History + progress tracking
+│   └── user_service.py      # User model + validation
 │
-├── fitness_service/
-│   ├── workout_generator.py
-│   └── routine.py
+├── frontend/                # Web UI
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 │
-├── health_service/
-│   ├── bmi.py              # BMI calculation logic
-│   └── calorie.py
-│
-├── user_services/
-│   ├── user.py
-│   └── validation.py
-│
-├── tracking_service/
-│   └── history.py
-│
+├── .env.example             # Environment template
+├── requirements.txt         # Python dependencies
+├── SETUP.md                 # Setup instructions
+├── ISSUES.md                # Known issues
+├── RESEARCH.md              # Technical research
+├── Progress.md              # Daily progress log
 └── README.md
 ```
 
